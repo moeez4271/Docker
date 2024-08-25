@@ -1,0 +1,5 @@
+# Run file_cleanup.sh every day at 1 AM
+0 1 * * * /app/file_cleanup.sh
+
+# Run file_processor.py every day at 2 AM
+0 2 * * * /usr/local/bin/python /app/file_processor.py

@@ -1,0 +1,29 @@
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . .
+
+# Make the Bash script executable
+RUN chmod +x file_cleanup.sh
+
+# Install cron
+RUN apt-get update && apt-get install -y cron
+
+# Add crontab file in the cron directory
+COPY crontab /etc/cron.d/file_cleanup_cron
+
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/file_cleanup_cron
+
+# Apply cron job
+RUN crontab /etc/cron.d/file_cleanup_cron
+
+# Create the log file
+RUN touch /var/log/file_cleanup.log
+
+# Run the command on container startup
+CMD ["cron", "-f"]
